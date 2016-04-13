@@ -1,0 +1,31 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BACKLOG	server.h	20;"	d	language:C++
+CC	Makefile	/^CC		= gcc$/;"	m	language:Make
+CFLAGS	Makefile	/^CFLAGS		= -g -pipe -Wall $/;"	m	language:Make
+EXEC	Makefile	/^EXEC		= server$/;"	m	language:Make
+OBJS	Makefile	/^OBJS		= server.o sock.o$/;"	m	language:Make
+PORT	server.h	18;"	d	language:C++
+SERVER_H	server.h	2;"	d	language:C++
+SOCK_H	sock.h	2;"	d	language:C++
+SRCS	Makefile	/^SRCS		= $(OBJSFILES:.o=.c)$/;"	m	language:Make
+get_host_addr	server.c	/^void get_host_addr(char *port, struct addrinfo **res)$/;"	f	language:C
+handle_incoming_request	server.c	/^int handle_incoming_request(int sockfd)$/;"	f	language:C
+main	server.c	/^int main(void)$/;"	f	language:C
+print_buf	server.c	/^void print_buf(char * buf, int len)$/;"	f	language:C
+read_request	server.c	/^void read_request(int fd)$/;"	f	language:C
+sigchld_handler	server.c	/^void sigchld_handler(int s)$/;"	f	language:C
+sock_accept	sock.c	/^int sock_accept(int sockfd, struct sockaddr_storage *their_addr, char *s)$/;"	f	language:C
+sock_bind	sock.c	/^void sock_bind(int sockfd, struct addrinfo *p)$/;"	f	language:C
+sock_close	sock.c	/^int sock_close(int socketd)$/;"	f	language:C
+sock_create	sock.c	/^int sock_create(struct addrinfo *p)$/;"	f	language:C
+sock_get_in_addr	sock.c	/^void *sock_get_in_addr(struct sockaddr *sa)$/;"	f	language:C
+sock_listen	sock.c	/^void sock_listen(int sockfd, int backlog)$/;"	f	language:C
+sock_read	sock.c	/^int sock_read(int socketd, char *buf, int n)$/;"	f	language:C
+sock_readchrd	sock.c	/^int sock_readchrd(int socketd, char *buf, int n, char delim)$/;"	f	language:C
+sock_readstrd	sock.c	/^int sock_readstrd(int socketd, char *buf, int n, char *delim)$/;"	f	language:C
+sock_write	sock.c	/^int sock_write(int socketd, char *buf, int n)$/;"	f	language:C
