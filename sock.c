@@ -7,7 +7,8 @@
 
 void sock_listen(int sockfd, int backlog)
 {
-  if (listen(sockfd, backlog) == -1) {
+  if (listen(sockfd, backlog) == -1)
+  {
     perror("listen");
     exit(1);
   }
@@ -15,7 +16,8 @@ void sock_listen(int sockfd, int backlog)
 
 void sock_bind(int sockfd, struct addrinfo *p)
 {
-  if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+  if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1)
+  {
     close(sockfd);
     perror("server: bind");
     exit(1);
@@ -27,12 +29,14 @@ int sock_create(struct addrinfo *p)
   int sockfd;
   int yes = 1;
 
-  if ((sockfd = socket(p->ai_family, p->ai_socktype,p->ai_protocol)) == -1) {
+  if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
+  {
     perror("server: socket");
     exit(1);
   }
 
-  if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes,sizeof(int)) == -1) {
+  if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
+  {
     perror("setsockopt");
     exit(1);
   }
@@ -45,7 +49,8 @@ int sock_accept(int sockfd, struct sockaddr_storage *their_addr, char *s)
   int new_fd;
   sin_size = sizeof their_addr;
   new_fd = accept(sockfd, (struct sockaddr *)their_addr, &sin_size);
-  if (new_fd == -1) {
+  if (new_fd == -1)
+  {
     perror("accept");
     return -1;
   }
@@ -121,8 +126,8 @@ int sock_readchrd(int socketd, char *buf, int n, char delim)
   char *start = buf;
 
   while (buf - start < n - 1
-      &&  (nread = read(socketd, buf, 1)) == 1
-      &&  *buf != delim)
+         &&  (nread = read(socketd, buf, 1)) == 1
+         &&  *buf != delim)
   {
     ++buf;
   }
@@ -174,9 +179,9 @@ int sock_readstrd(int socketd, char *buf, int n, char *delim)
   buf[++i] = '\0';
 
   while (nread == 1
-      &&  i != n - 1
-      &&  (i < dlen
-        ||  strncmp(buf +i -dlen, delim, dlen) != 0))
+         &&  i != n - 1
+         &&  (i < dlen
+              ||  strncmp(buf + i - dlen, delim, dlen) != 0))
   {
     nread = read(socketd, buf + i, 1);
 
@@ -197,7 +202,8 @@ int sock_readstrd(int socketd, char *buf, int n, char *delim)
 /* helper functions */
 void *sock_get_in_addr(struct sockaddr *sa)
 {
-  if (sa->sa_family == AF_INET) {
+  if (sa->sa_family == AF_INET)
+  {
     return &(((struct sockaddr_in*)sa)->sin_addr);
   }
   return &(((struct sockaddr_in6*)sa)->sin6_addr);
