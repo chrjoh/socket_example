@@ -48,18 +48,21 @@ int64_t sock_accept(int64_t sockfd, struct sockaddr_storage *their_addr, char *s
   socklen_t sin_size;
   int64_t new_fd;
   sin_size = sizeof their_addr;
-  new_fd = accept(sockfd, (struct sockaddr *)their_addr, &sin_size);
+  new_fd   = accept(sockfd, (struct sockaddr *)their_addr, &sin_size);
+
   if (new_fd == -1)
   {
     perror("accept");
     return -1;
   }
+
   inet_ntop(their_addr->ss_family, sock_get_in_addr((struct sockaddr *)their_addr), s, sizeof s);
+
   printf("server: got connection from %s\n", s);
   return new_fd;
 }
 
-int64_t sock_read(int64_t socketd, char *buf, int64_t n)
+int64_t sock_read(int64_t socketd, char buf[], int64_t n)
 {
   int64_t nread;
 
@@ -74,7 +77,7 @@ int64_t sock_read(int64_t socketd, char *buf, int64_t n)
   return nread;
 }
 
-int64_t sock_write(int64_t socketd, char *buf, int64_t n)
+int64_t sock_write(int64_t socketd, char buf[], int64_t n)
 {
   int64_t nwritten;
 
@@ -104,7 +107,7 @@ int64_t sock_close(int64_t socketd)
   return res;
 }
 
-
+
 /* sock_readchrd
  *
  * Sock_readchrd reads characters into the given
@@ -120,7 +123,7 @@ int64_t sock_close(int64_t socketd)
  * characters read.
  *
  */
-int64_t sock_readchrd(int64_t socketd, char *buf, int64_t n, char delim)
+int64_t sock_readchrd(int64_t socketd, char buf[], int64_t n, char delim)
 {
   int64_t   nread;
   char *start = buf;
@@ -161,14 +164,16 @@ int64_t sock_readchrd(int64_t socketd, char *buf, int64_t n, char delim)
  *
  */
 
-int64_t sock_readstrd(int64_t socketd, char *buf, int64_t n, char *delim)
+int64_t sock_readstrd(int64_t socketd, char buf[], int64_t n, char delim[])
 {
   int64_t   nread;
   int64_t   i = 0;
   int64_t   dlen = strlen(delim);
 
   if (n == 0)
+  {
     return 0;
+  }
   else if (n == 1)
   {
     buf[0] = '\0';

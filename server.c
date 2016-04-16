@@ -30,6 +30,7 @@ int main(void)
   sa.sa_handler = sigchld_handler;
   sigemptyset(&sa.sa_mask);
   sa.sa_flags = SA_RESTART;
+  
   if (sigaction(SIGCHLD, &sa, NULL) == -1)
   {
     perror("sigaction");
@@ -41,15 +42,14 @@ int main(void)
 }
 
 
-void get_host_addr(const char *port, struct addrinfo **res)
+void get_host_addr(char port[], struct addrinfo **res)
 {
-  struct addrinfo hints;
+  struct addrinfo hints = {0};
   int64_t rv;
 
-  memset(&hints, 0, sizeof hints);
-  hints.ai_family = AF_UNSPEC;
+  hints.ai_family   = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
-  hints.ai_flags = AI_PASSIVE;
+  hints.ai_flags    = AI_PASSIVE;
 
   if ((rv = getaddrinfo(NULL, port, &hints, res)) != 0)
   {
@@ -90,8 +90,8 @@ int64_t handle_incoming_request(int64_t sockfd)
 
 void read_request(int64_t fd)
 {
-  int64_t len = 250;
-  char buf[249];
+  int64_t len = 249;
+  char buf[250];
   int64_t bytes_read;
 
   while (1)
