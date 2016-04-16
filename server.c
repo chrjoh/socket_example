@@ -3,7 +3,7 @@
 
 int main(void)
 {
-  int sockfd;
+  int64_t sockfd;
   struct addrinfo *servinfo, *p;
 
   struct sigaction sa;
@@ -41,10 +41,10 @@ int main(void)
 }
 
 
-void get_host_addr(char *port, struct addrinfo **res)
+void get_host_addr(const char *port, struct addrinfo **res)
 {
   struct addrinfo hints;
-  int rv;
+  int64_t rv;
 
   memset(&hints, 0, sizeof hints);
   hints.ai_family = AF_UNSPEC;
@@ -59,11 +59,11 @@ void get_host_addr(char *port, struct addrinfo **res)
 }
 
 
-int handle_incoming_request(int sockfd)
+int64_t handle_incoming_request(int64_t sockfd)
 {
   struct sockaddr_storage their_addr;
   char s[INET6_ADDRSTRLEN];
-  int new_fd;
+  int64_t new_fd;
 
   while (1)
   {
@@ -88,11 +88,11 @@ int handle_incoming_request(int sockfd)
   return 0;
 }
 
-void read_request(int fd)
+void read_request(int64_t fd)
 {
-  int len = 250;
+  int64_t len = 250;
   char buf[249];
-  int bytes_read;
+  int64_t bytes_read;
 
   while (1)
   {
@@ -110,9 +110,9 @@ void read_request(int fd)
   return;
 }
 
-void print_buf(char * buf, int len)
+void print_buf(char * buf, int64_t len)
 {
-  int i;
+  int64_t i;
   for (i = 0; i < len; i++)
   {
     printf("%c", buf[i]);

@@ -5,7 +5,7 @@
 
 #include "sock.h"
 
-void sock_listen(int sockfd, int backlog)
+void sock_listen(int64_t sockfd, int64_t backlog)
 {
   if (listen(sockfd, backlog) == -1)
   {
@@ -14,7 +14,7 @@ void sock_listen(int sockfd, int backlog)
   }
 }
 
-void sock_bind(int sockfd, struct addrinfo *p)
+void sock_bind(int64_t sockfd, struct addrinfo *p)
 {
   if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1)
   {
@@ -24,10 +24,10 @@ void sock_bind(int sockfd, struct addrinfo *p)
   }
 }
 
-int sock_create(struct addrinfo *p)
+int64_t sock_create(struct addrinfo *p)
 {
-  int sockfd;
-  int yes = 1;
+  int64_t sockfd;
+  int64_t yes = 1;
 
   if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
   {
@@ -35,7 +35,7 @@ int sock_create(struct addrinfo *p)
     exit(1);
   }
 
-  if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
+  if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int64_t)) == -1)
   {
     perror("setsockopt");
     exit(1);
@@ -43,10 +43,10 @@ int sock_create(struct addrinfo *p)
   return sockfd;
 }
 
-int sock_accept(int sockfd, struct sockaddr_storage *their_addr, char *s)
+int64_t sock_accept(int64_t sockfd, struct sockaddr_storage *their_addr, char *s)
 {
   socklen_t sin_size;
-  int new_fd;
+  int64_t new_fd;
   sin_size = sizeof their_addr;
   new_fd = accept(sockfd, (struct sockaddr *)their_addr, &sin_size);
   if (new_fd == -1)
@@ -59,9 +59,9 @@ int sock_accept(int sockfd, struct sockaddr_storage *their_addr, char *s)
   return new_fd;
 }
 
-int sock_read(int socketd, char *buf, int n)
+int64_t sock_read(int64_t socketd, char *buf, int64_t n)
 {
-  int nread;
+  int64_t nread;
 
   nread = read(socketd, buf, n);
 
@@ -74,9 +74,9 @@ int sock_read(int socketd, char *buf, int n)
   return nread;
 }
 
-int sock_write(int socketd, char *buf, int n)
+int64_t sock_write(int64_t socketd, char *buf, int64_t n)
 {
-  int nwritten;
+  int64_t nwritten;
 
   nwritten = write(socketd, buf, n);
 
@@ -89,9 +89,9 @@ int sock_write(int socketd, char *buf, int n)
   return nwritten;
 }
 
-int sock_close(int socketd)
+int64_t sock_close(int64_t socketd)
 {
-  int   res;
+  int64_t   res;
 
   res = close(socketd);
 
@@ -120,9 +120,9 @@ int sock_close(int socketd)
  * characters read.
  *
  */
-int sock_readchrd(int socketd, char *buf, int n, char delim)
+int64_t sock_readchrd(int64_t socketd, char *buf, int64_t n, char delim)
 {
-  int   nread;
+  int64_t   nread;
   char *start = buf;
 
   while (buf - start < n - 1
@@ -161,11 +161,11 @@ int sock_readchrd(int socketd, char *buf, int n, char delim)
  *
  */
 
-int sock_readstrd(int socketd, char *buf, int n, char *delim)
+int64_t sock_readstrd(int64_t socketd, char *buf, int64_t n, char *delim)
 {
-  int   nread;
-  int   i = 0;
-  int   dlen = strlen(delim);
+  int64_t   nread;
+  int64_t   i = 0;
+  int64_t   dlen = strlen(delim);
 
   if (n == 0)
     return 0;

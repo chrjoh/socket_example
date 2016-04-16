@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
@@ -20,10 +21,10 @@
 #define BACKLOG 10
 
 void sigchld_handler(int s);
-void read_request(int fd);
-void print_buf(char * buf, int len);
-int handle_incoming_request(int socket_fd);
-void get_host_addr(char *port, struct addrinfo **res);
+void read_request(int64_t fd);
+void print_buf(char * buf, int64_t len);
+int64_t handle_incoming_request(int64_t socket_fd);
+void get_host_addr(const char *port, struct addrinfo **res);
 
 
 #endif
