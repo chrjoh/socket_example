@@ -1,6 +1,4 @@
-#ifndef SOCK_H
-#define SOCK_H
-
+#pragma once
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -39,4 +37,3 @@ int64_t sock_readchrd (int64_t socketd, char buf[], int64_t n, char delim);
 int64_t sock_readstrd (int64_t socketd, char buf[], int64_t n, char delimi[]);
 
 void *sock_get_in_addr(struct sockaddr *sa);
-#endif

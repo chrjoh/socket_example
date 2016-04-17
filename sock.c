@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-
 #include "sock.h"
 
 void sock_listen(int64_t sockfd, int64_t backlog)
@@ -18,7 +13,7 @@ void sock_bind(int64_t sockfd, struct addrinfo *p)
 {
   if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1)
   {
-    close(sockfd);
+    sock_close(sockfd);
     perror("server: bind");
     exit(1);
   }

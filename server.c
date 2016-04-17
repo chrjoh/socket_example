@@ -1,11 +1,9 @@
 #include "server.h"
-#include "sock.h"
 
 int main(void)
 {
   int64_t sockfd;
   struct addrinfo *servinfo, *p;
-
   struct sigaction sa;
 
   get_host_addr(PORT, &servinfo);
@@ -38,9 +36,10 @@ int main(void)
   }
 
   printf("server: waiting for connections...\n");
-  return handle_incoming_request(sockfd);
+  handle_incoming_request(sockfd);
+  sock_close(sockfd);
+  return 0;
 }
-
 
 void get_host_addr(char port[], struct addrinfo **res)
 {
@@ -57,7 +56,6 @@ void get_host_addr(char port[], struct addrinfo **res)
     exit(1);
   }
 }
-
 
 int64_t handle_incoming_request(int64_t sockfd)
 {
@@ -83,7 +81,6 @@ int64_t handle_incoming_request(int64_t sockfd)
     }
     sock_close(new_fd);
   }
-
   return 0;
 }
 
