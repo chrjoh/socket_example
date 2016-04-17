@@ -19,8 +19,7 @@ int main(void)
 
   if (p == NULL)
   {
-    fprintf(stderr, "server: failed to bind\n");
-    exit(1);
+    exit_with_user_message("server:", "bind failed");
   }
 
   sock_listen(sockfd, BACKLOG);
@@ -31,8 +30,7 @@ int main(void)
 
   if (sigaction(SIGCHLD, &sa, NULL) == -1)
   {
-    perror("sigaction");
-    exit(1);
+    exit_with_system_message("server: sigaction");
   }
 
   printf("server: waiting for connections...\n");
@@ -52,8 +50,7 @@ void get_host_addr(char port[], struct addrinfo **res)
 
   if ((rv = getaddrinfo(NULL, port, &hints, res)) != 0)
   {
-    fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-    exit(1);
+    exit_with_user_message("server: getaddrinfo", gai_strerror(rv));
   }
 }
 
@@ -62,7 +59,7 @@ int64_t handle_incoming_request(int64_t sockfd)
   struct sockaddr_storage client_addr;
   int64_t new_fd;
   const char msg[] = "Request processed.\n";
- 
+
   while (1)
   {
     if ((new_fd = sock_accept(sockfd, &client_addr)) == -1)
@@ -75,7 +72,7 @@ int64_t handle_incoming_request(int64_t sockfd)
       read_request(new_fd);
       if (send(new_fd, msg, sizeof msg, 0) == -1)
       {
-        perror("send");
+        system_message("server: send to client", 0);
       }
       sock_close(new_fd);
       exit(0);
@@ -91,6 +88,7 @@ void read_request(int64_t fd)
   char buf[BUFSIZE];
   int64_t bytes_read;
 
+  /* TODO: error check recv */
   bytes_read = recv(fd, buf, BUFSIZE - 1, 0);
   while (bytes_read > 0)
   {

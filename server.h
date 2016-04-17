@@ -15,6 +15,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include "sock.h"
+#include "logging.h"
 
 #define PORT "7071"
 #define BACKLOG 10

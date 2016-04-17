@@ -6,7 +6,7 @@ CC		= gcc
 #CFLAGS		= -ansi  -g -pipe -Wall 
 CFLAGS		= -std=c11 -g -pipe -D_XOPEN_SOURCE=700 -Wall -lpthread
 
-OBJS		= server.o sock.o
+OBJS		= server.o sock.o logging.o
 SRCS		= $(OBJSFILES:.o=.c)
 EXEC		= server
 

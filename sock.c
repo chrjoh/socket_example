@@ -4,8 +4,7 @@ void sock_listen(int64_t sockfd, int64_t backlog)
 {
   if (listen(sockfd, backlog) == -1)
   {
-    perror("listen");
-    exit(1);
+    exit_with_system_message("sock: listen");
   }
 }
 
@@ -14,8 +13,7 @@ void sock_bind(int64_t sockfd, struct addrinfo *p)
   if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1)
   {
     sock_close(sockfd);
-    perror("server: bind");
-    exit(1);
+    exit_with_system_message("sock: bind");
   }
 }
 
@@ -26,14 +24,12 @@ int64_t sock_create(struct addrinfo *p)
 
   if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
   {
-    perror("server: socket");
-    exit(1);
+    exit_with_system_message("sock: create");
   }
 
   if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int64_t)) == -1)
   {
-    perror("setsockopt");
-    exit(1);
+    exit_with_system_message("sock: set socket options");
   }
   return sockfd;
 }
@@ -45,12 +41,11 @@ int64_t sock_accept(int64_t sockfd, struct sockaddr_storage *client_addr)
   char s[INET6_ADDRSTRLEN];
 
   sin_size = sizeof client_addr;
-  new_fd   = accept(sockfd, (struct sockaddr *)client_addr, &sin_size);
+  new_fd = accept(sockfd, (struct sockaddr *)client_addr, &sin_size);
 
   if (new_fd == -1)
   {
-    perror("accept");
-    return -1;
+    return system_message("sock: error then accepting client socket", -1);
   }
 
   inet_ntop(client_addr->ss_family, sock_get_in_addr((struct sockaddr *)client_addr), s, sizeof s);
@@ -67,8 +62,7 @@ int64_t sock_read(int64_t socketd, char buf[], int64_t n)
 
   if (nread < 0)
   {
-    perror("read");
-    exit(1);
+    exit_with_system_message("sock: read");
   }
 
   return nread;
@@ -82,8 +76,7 @@ int64_t sock_write(int64_t socketd, char buf[], int64_t n)
 
   if (nwritten != n)
   {
-    perror("write");
-    exit (1);
+    exit_with_system_message("sock: write");
   }
 
   return nwritten;
@@ -97,8 +90,7 @@ int64_t sock_close(int64_t socketd)
 
   if (res < 0)
   {
-    perror("close");
-    exit(1);
+    exit_with_system_message("sock: close");
   }
 
   return res;
@@ -134,8 +126,7 @@ int64_t sock_readchrd(int64_t socketd, char buf[], int64_t n, char delim)
 
   if (nread < 0)
   {
-    perror("read");
-    exit (1);
+    exit_with_system_message("sock: error then reading with char delimiter");
   }
 
   if (*buf == delim)
@@ -195,8 +186,7 @@ int64_t sock_readstrd(int64_t socketd, char buf[], int64_t n, char delim[])
 
   if (nread < 0)
   {
-    perror("read");
-    exit(1);
+    exit_with_system_message("sock: error then reading with string delimiter");
   }
   return  i;
 }

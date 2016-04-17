@@ -15,7 +15,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <netdb.h>
-
+#include "logging.h"
 
 int64_t sock_create(struct addrinfo *p);
 void sock_bind(int64_t sockfd, struct addrinfo *p);
