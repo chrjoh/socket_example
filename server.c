@@ -30,7 +30,7 @@ int main(void)
   sa.sa_handler = sigchld_handler;
   sigemptyset(&sa.sa_mask);
   sa.sa_flags = SA_RESTART;
-  
+
   if (sigaction(SIGCHLD, &sa, NULL) == -1)
   {
     perror("sigaction");
@@ -89,36 +89,25 @@ int64_t handle_incoming_request(int64_t sockfd)
 
 void read_request(int64_t fd)
 {
-  int64_t len = 249;
-  char buf[250];
+  int64_t BUFSIZE = 250;
+  char buf[BUFSIZE];
   int64_t bytes_read;
 
-  while (1)
+  bytes_read = recv(fd, buf, BUFSIZE - 1, 0);
+  while (bytes_read > 0)
   {
-    bytes_read = recv(fd, buf, len, 0);
-    if (bytes_read < 1)
+    buf[bytes_read] = '\0';
+    fputs(buf, stdout);
+    if (bytes_read < BUFSIZE - 1)
     {
       break;
     }
-    print_buf(buf, bytes_read);
-    if (bytes_read < len)
-    {
-      break;
-    }
+    bytes_read = recv(fd, buf, BUFSIZE - 1, 0);
   }
+  fputc('\n', stdout);
   return;
 }
 
-void print_buf(char * buf, int64_t len)
-{
-  int64_t i;
-  for (i = 0; i < len; i++)
-  {
-    printf("%c", buf[i]);
-  }
-  printf("\n");
-
-}
 
 /* make sure we do not get any zombie processes*/
 void sigchld_handler(int s)

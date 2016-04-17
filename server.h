@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
@@ -22,7 +23,6 @@
 
 void sigchld_handler(int s);
 void read_request(int64_t fd);
-void print_buf(char * buf, int64_t len);
 int64_t handle_incoming_request(int64_t socket_fd);
 void get_host_addr(char port[], struct addrinfo **res);
 
