@@ -61,13 +61,12 @@ void get_host_addr(char port[], struct addrinfo **res)
 
 int64_t handle_incoming_request(int64_t sockfd)
 {
-  struct sockaddr_storage their_addr;
-  char s[INET6_ADDRSTRLEN];
+  struct sockaddr_storage client_addr;
   int64_t new_fd;
 
   while (1)
   {
-    if ((new_fd = sock_accept(sockfd, &their_addr, s)) == -1)
+    if ((new_fd = sock_accept(sockfd, &client_addr)) == -1)
     {
       continue;
     }

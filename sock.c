@@ -43,12 +43,14 @@ int64_t sock_create(struct addrinfo *p)
   return sockfd;
 }
 
-int64_t sock_accept(int64_t sockfd, struct sockaddr_storage *their_addr, char *s)
+int64_t sock_accept(int64_t sockfd, struct sockaddr_storage *client_addr)
 {
   socklen_t sin_size;
   int64_t new_fd;
-  sin_size = sizeof their_addr;
-  new_fd   = accept(sockfd, (struct sockaddr *)their_addr, &sin_size);
+  char s[INET6_ADDRSTRLEN];
+
+  sin_size = sizeof client_addr;
+  new_fd   = accept(sockfd, (struct sockaddr *)client_addr, &sin_size);
 
   if (new_fd == -1)
   {
@@ -56,7 +58,7 @@ int64_t sock_accept(int64_t sockfd, struct sockaddr_storage *their_addr, char *s
     return -1;
   }
 
-  inet_ntop(their_addr->ss_family, sock_get_in_addr((struct sockaddr *)their_addr), s, sizeof s);
+  inet_ntop(client_addr->ss_family, sock_get_in_addr((struct sockaddr *)client_addr), s, sizeof s);
 
   printf("server: got connection from %s\n", s);
   return new_fd;

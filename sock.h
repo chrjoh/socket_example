@@ -22,7 +22,7 @@
 int64_t sock_create(struct addrinfo *p);
 void sock_bind(int64_t sockfd, struct addrinfo *p);
 void sock_listen(int64_t sockfd, int64_t backlog);
-int64_t sock_accept(int64_t sockfd, struct sockaddr_storage *their_addr, char *s);
+int64_t sock_accept(int64_t sockfd, struct sockaddr_storage *client_addr);
 int64_t sock_read (int64_t socketd, char buf[], int64_t n);
 int64_t sock_write (int64_t socketd, char buf[], int64_t n);
 int64_t sock_close (int64_t socketd);
