@@ -61,7 +61,8 @@ int64_t handle_incoming_request(int64_t sockfd)
 {
   struct sockaddr_storage client_addr;
   int64_t new_fd;
-
+  const char msg[] = "Request processed.\n";
+ 
   while (1)
   {
     if ((new_fd = sock_accept(sockfd, &client_addr)) == -1)
@@ -72,7 +73,7 @@ int64_t handle_incoming_request(int64_t sockfd)
     {
       sock_close(sockfd);
       read_request(new_fd);
-      if (send(new_fd, "Done", 13, 0) == -1)
+      if (send(new_fd, msg, sizeof msg, 0) == -1)
       {
         perror("send");
       }
