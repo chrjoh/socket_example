@@ -10,11 +10,11 @@ void free_session(session_t *session)
   }
 }
 
-void setup_session(session_t *session)
+void setup_session(session_t *session, int64_t fd)
 {
   session->request = NULL;
   session->request_uri = NULL;
-  session->client_socket = 0;
+  session->client_socket = fd;
   session->header_length = 0;
   session->buffer_size = 0;
   session->bytes_in_buffer = 0;

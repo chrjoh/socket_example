@@ -57,7 +57,7 @@ void get_host_addr(char port[], struct addrinfo **res)
 int64_t handle_incoming_request(int64_t sockfd)
 {
   struct sockaddr_storage client_addr;
-      session_t client;
+  session_t client;
   int64_t new_fd;
   const char msg[] = "Request processed.\n";
 
@@ -70,7 +70,7 @@ int64_t handle_incoming_request(int64_t sockfd)
     if (!fork())
     {
       sock_close(sockfd);
-      client.client_socket = new_fd;
+      setup_session(&client, new_fd);
       read_request(&client);
       if (send(new_fd, msg, sizeof msg, 0) == -1)
       {

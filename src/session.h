@@ -11,5 +11,5 @@ typedef struct session
 } session_t;
 
 void free_session(session_t *session);
-void setup_session(session_t *session);
+void setup_session(session_t *session, int64_t fd);
 void check_and_free(void *p);

@@ -22,6 +22,7 @@
 #define BACKLOG 10
 
 void sigchld_handler(int s);
+void serve_client(int64_t fd);
 void read_request(session_t *session);
 int64_t handle_incoming_request(int64_t socket_fd);
 void get_host_addr(char port[], struct addrinfo **res);
