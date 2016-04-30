@@ -4,6 +4,10 @@ void free_session(session_t *session)
 {
   check_and_free(session->request_uri);
   check_and_free(session->request);
+  if (session->client_socket > 0)
+  {
+    sock_close(session->client_socket);
+  }
 }
 
 void setup_session(session_t *session)

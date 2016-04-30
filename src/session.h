@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdlib.h>
+#include "sock.h"
 
 typedef struct session
 {

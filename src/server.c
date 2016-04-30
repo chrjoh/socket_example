@@ -57,6 +57,7 @@ void get_host_addr(char port[], struct addrinfo **res)
 int64_t handle_incoming_request(int64_t sockfd)
 {
   struct sockaddr_storage client_addr;
+      session_t client;
   int64_t new_fd;
   const char msg[] = "Request processed.\n";
 
@@ -69,12 +70,13 @@ int64_t handle_incoming_request(int64_t sockfd)
     if (!fork())
     {
       sock_close(sockfd);
-      read_request(new_fd);
+      client.client_socket = new_fd;
+      read_request(&client);
       if (send(new_fd, msg, sizeof msg, 0) == -1)
       {
         system_message("server: send to client", 0);
       }
-      sock_close(new_fd);
+      free_session(&client);
       exit(0);
     }
     sock_close(new_fd);
@@ -82,14 +84,14 @@ int64_t handle_incoming_request(int64_t sockfd)
   return 0;
 }
 
-void read_request(int64_t fd)
+void read_request(session_t *session)
 {
   int64_t BUFSIZE = 250;
   char buf[BUFSIZE];
   int64_t bytes_read;
 
   /* TODO: error check recv */
-  bytes_read = recv(fd, buf, BUFSIZE - 1, 0);
+  bytes_read = recv(session->client_socket, buf, BUFSIZE - 1, 0);
   while (bytes_read > 0)
   {
     buf[bytes_read] = '\0';
@@ -98,7 +100,7 @@ void read_request(int64_t fd)
     {
       break;
     }
-    bytes_read = recv(fd, buf, BUFSIZE - 1, 0);
+    bytes_read = recv(session->client_socket, buf, BUFSIZE - 1, 0);
   }
   fputc('\n', stdout);
   return;

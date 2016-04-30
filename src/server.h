@@ -16,11 +16,12 @@
 #include <signal.h>
 #include "sock.h"
 #include "logging.h"
+#include "session.h"
 
 #define PORT "7071"
 #define BACKLOG 10
 
 void sigchld_handler(int s);
-void read_request(int64_t fd);
+void read_request(session_t *session);
 int64_t handle_incoming_request(int64_t socket_fd);
 void get_host_addr(char port[], struct addrinfo **res);
