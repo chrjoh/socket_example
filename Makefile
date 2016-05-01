@@ -8,7 +8,7 @@ OBJDIR  = obj
 SRCDIR  = src
 EXEC    = server
 
-SRCFILES = server.c sock.c logging.c session.c
+SRCFILES = server.c sock.c logging.c session.c http_client.c
 SRCS     = $(patsubst %.c,$(SRCDIR)/%.c, $(SRCFILES))
 OBJS     = $(patsubst %.c,$(OBJDIR)/%.o,$(SRCFILES))
 

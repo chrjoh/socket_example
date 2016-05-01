@@ -17,11 +17,7 @@
 #include "sock.h"
 #include "logging.h"
 #include "session.h"
-#include "http_client.h"
 
-#define PORT "7071"
-#define BACKLOG 10
-
-void sigchld_handler(int s);
-int64_t handle_incoming_request(int64_t socket_fd);
-void get_host_addr(char port[], struct addrinfo **res);
+void handle_client(int64_t fd);
+void read_request(session_t *session);
+void set_header_length(session_t *session);
