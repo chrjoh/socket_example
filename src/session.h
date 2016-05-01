@@ -5,7 +5,7 @@
 
 typedef struct session
 {
-  char *request, *request_uri;
+  char *request, *request_uri, *method, *uri, *body;
   size_t bytes_in_buffer, header_length, buffer_size, uri_length;
   int64_t client_socket;
 } session_t;

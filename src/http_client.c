@@ -6,10 +6,11 @@ void handle_client(int64_t fd)
 {
   const char msg[] = "Request processed.\n";
   session_t client;
-  
+
   setup_session(&client, fd);
   read_request(&client);
   set_header_length(&client);
+  extract_request_into_session(&client);
   print_session(&client);
   if (send(fd, msg, sizeof msg, 0) == -1)
   {
@@ -72,3 +73,35 @@ void read_request(session_t *session)
   return;
 }
 
+
+int64_t extract_request_into_session(session_t *session)
+{
+  char *str, *header_end;
+
+  header_end = session->request + session->header_length;
+
+  session->method = str = session->request;
+  while ((*str != ' ') && (str != header_end))
+  {
+    str++;
+  }
+  *str = '\0';// insert string termination
+  session->uri = ++str;
+
+  while ((*str != ' ') && (str != header_end))
+  {
+    str++;
+  }
+  *str = '\0';
+  session->uri_length = strlen(session->uri);
+
+  if ((session->request_uri = strdup(session->uri)) == NULL)
+  {
+    return -1;
+  }
+  str++; // we have parsed out the uri so point the str to next value in the request
+
+  session->body = session->request + session->header_length;
+  /* TODO: add other requst header values as needed also need error checks*/
+  return 0;
+}
