@@ -1,5 +1,7 @@
 #include "server.h"
 
+#define BUFFER_CHUNK     64
+
 int main(void)
 {
   int64_t sockfd;
@@ -72,6 +74,9 @@ int64_t handle_incoming_request(int64_t sockfd)
       sock_close(sockfd);
       setup_session(&client, new_fd);
       read_request(&client);
+      fputs(client.request, stdout);
+      fputc('\n', stdout);
+
       if (send(new_fd, msg, sizeof msg, 0) == -1)
       {
         system_message("server: send to client", 0);
@@ -86,23 +91,46 @@ int64_t handle_incoming_request(int64_t sockfd)
 
 void read_request(session_t *session)
 {
-  int64_t BUFSIZE = 250;
-  char buf[BUFSIZE];
+  char *buf;
   int64_t bytes_read;
 
-  /* TODO: error check recv */
-  bytes_read = recv(session->client_socket, buf, BUFSIZE - 1, 0);
+  session->buffer_size = BUFFER_CHUNK;
+  if ((buf = (char*)realloc(session->request, session->buffer_size + 1)) != NULL)
+  {
+    session->request = buf;
+  }
+  else
+  {
+    exit_with_system_message("server: failed to allocate buffer memory");
+  }
+
+  /* TODO: error check recv 
+   * clean up code and move first allocate and read into the while loop
+   * verify pointer calculations!!
+   * */
+  bytes_read = recv(session->client_socket, session->request, session->buffer_size, 0);
   while (bytes_read > 0)
   {
-    buf[bytes_read] = '\0';
-    fputs(buf, stdout);
-    if (bytes_read < BUFSIZE - 1)
+    session->bytes_in_buffer += bytes_read;
+    //printf("Bytes in buffer: %" PRId64 "\n",session->bytes_in_buffer);
+    session->buffer_size += BUFFER_CHUNK;
+    if (bytes_read < BUFFER_CHUNK - 1)
     {
+      session->request[session->bytes_in_buffer] = '\0';
       break;
     }
-    bytes_read = recv(session->client_socket, buf, BUFSIZE - 1, 0);
+    if ((buf = (char*)realloc(session->request, session->buffer_size + 1)) != NULL)
+    {
+      session->request = buf;
+    }
+    else
+    {
+      exit_with_system_message("server: failed to allocate buffer memory");
+    }
+    bytes_read = recv(session->client_socket,
+                      session->request + session->bytes_in_buffer,
+                      session->buffer_size - session->bytes_in_buffer, 0);
   }
-  fputc('\n', stdout);
   return;
 }
 

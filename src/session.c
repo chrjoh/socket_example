@@ -1,5 +1,6 @@
 #include "session.h"
 
+
 void free_session(session_t *session)
 {
   check_and_free(session->request_uri);
