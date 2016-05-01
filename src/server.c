@@ -65,17 +65,31 @@ int64_t handle_incoming_request(int64_t sockfd)
     {
       continue;
     }
-    if (!fork())
+    thread_args_t *thread_args = (thread_args_t *) malloc(sizeof(thread_args_t));
+    if (thread_args == NULL)
     {
-      sock_close(sockfd);
-      handle_client(new_fd);
-      exit(0);
+      exit_with_system_message("server: failed to allocate memory for thread");
     }
-    sock_close(new_fd);
+    thread_args->client_socket = new_fd;
+    pthread_t thread_id;
+    if (pthread_create(&thread_id, NULL, thread_worker, thread_args) != 0)
+    {
+      exit_with_system_message("server: failed to create thread");
+    }
+
   }
   return 0;
 }
 
+void *thread_worker(void *thread_args)
+{
+  pthread_detach(pthread_self());
+  int64_t fd = ((thread_args_t *) thread_args)->client_socket;
+  free(thread_args);
+  handle_client(fd);
+
+  return NULL;
+}
 
 /* make sure we do not get any zombie processes*/
 void sigchld_handler(int s)

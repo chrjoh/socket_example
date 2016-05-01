@@ -10,7 +10,10 @@ void handle_client(int64_t fd)
   setup_session(&client, fd);
   read_request(&client);
   set_header_length(&client);
-  extract_request_into_session(&client);
+  if(extract_request_into_session(&client) == -1)
+  {
+    exit_with_user_message("http_client: failed to extract request data into session structure","");
+  }
   print_session(&client);
   if (send(fd, msg, sizeof msg, 0) == -1)
   {
