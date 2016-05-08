@@ -45,13 +45,16 @@ void print_session(session_t *session)
     fputc(session->request[i], stdout);
   }
   printf("---> HEADER END\n");
-  printf("method: %s\n",session->method);
-  printf("uri: %s\n",session->request_uri);
+  printf("method: %s\n", session->method);
+  printf("uri: %s\n", session->request_uri);
   printf("---> BODY START\n");
-  printf("%s",session->body);
+  if (session->body != NULL)
+  {
+    printf("%s", session->body);
+  }
   //for (int i = session->header_length; i < session->bytes_in_buffer; i++)
   //{
-   // fputc(session->request[i], stdout);
+  // fputc(session->request[i], stdout);
   //}
   printf("\n---> BODY END\n");
   printf("---------------------E N D----------------------------------\n");

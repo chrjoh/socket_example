@@ -22,13 +22,13 @@ all: directory $(EXEC)
 directory: $(OBJDIR)
 
 $(EXEC):	$(OBJS)
-	$(CC) -o $@  $(LDLIBS) $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
 $(OBJDIR):
 	$(MKDIR_P) $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 ,clean:    ;rm -f $(OBJS) 
 ,cleanall: ;rm -f $(OBJS) $(EXEC)

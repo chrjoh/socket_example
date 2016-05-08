@@ -10,9 +10,9 @@ void handle_client(int64_t fd)
   setup_session(&client, fd);
   read_request(&client);
   set_header_length(&client);
-  if(extract_request_into_session(&client) == -1)
+  if (extract_request_into_session(&client) == -1)
   {
-    exit_with_user_message("http_client: failed to extract request data into session structure","");
+    exit_with_user_message("http_client: failed to extract request data into session structure", "");
   }
   print_session(&client);
   if (send(fd, msg, sizeof msg, 0) == -1)
@@ -104,7 +104,10 @@ int64_t extract_request_into_session(session_t *session)
   }
   str++; // we have parsed out the uri so point the str to next value in the request
 
-  session->body = session->request + session->header_length;
+  if (strcmp("POST", session->method) == 0)
+  {
+    session->body = session->request + session->header_length;
+  }
   /* TODO: add other requst header values as needed also need error checks*/
   return 0;
 }

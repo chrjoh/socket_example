@@ -2,7 +2,7 @@
 
 int main(void)
 {
-  int64_t sockfd;
+  int64_t sockfd = 0;
   struct addrinfo *servinfo, *p;
   struct sigaction sa;
 
@@ -35,7 +35,6 @@ int main(void)
 
   printf("server: waiting for connections...\n");
   handle_incoming_request(sockfd);
-  sock_close(sockfd);
   return 0;
 }
 
@@ -78,6 +77,7 @@ int64_t handle_incoming_request(int64_t sockfd)
     }
 
   }
+  sock_close(sockfd);
   return 0;
 }
 
